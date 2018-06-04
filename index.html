@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <a href="http://www.baidu.com" onClick="doSomething(this)">百度</a>
+
+    <a href="somewhere.html"
+       onMouseOver="window.status = 'This link goes somewhere'; return true">somewhere</a>
+
+    <a href="somewhere.html" onClick="doSomething2(this)">doSomething2</a>
+
+    <a href="somewhere.html" onClick="return doSomething3(this)">doSomething3</a>
+    <a href="somewhereElse.html" onClick="return doSomething3(this)">doSomething3</a>
+
+    <a href="somewhereElse.html" id="doSomething4">doSomething4</a>
+
+    <p id="clickme">doSomething4</p>
+  </body>
+  <script>
+    function doSomething(obj) {
+      console.log(obj)
+      return confirm('Do you really want to follow ' + obj.innerHTML + 'link?')
+    }
+
+    function doSomething2(obj) {
+      console.log(obj.innerHTML)
+      event.preventDefault()
+      // obj now refers to the link
+    }
+
+    function doSomething3(obj) {
+      var linkTo = obj.href;
+
+      return confirm('Do you really want to follow the link to ' + linkTo + '?')
+    }
+
+
+    function aaa() {
+      console.log(this)
+    }
+
+    document.getElementById('doSomething4').onclick = function () {
+      event.preventDefault()
+
+      console.log(this)
+
+      aaa()
+      bbb()
+    }
+
+    function bbb() {
+      console.log(this)
+    }
+
+    var clickme = document.getElementById('clickme');
+    clickme.addEventListener('click', foo1, true);
+    clickme.onclick = foo2;
+    clickme.addEventListener('click', foo3, true);
+    function foo1(event) {
+      console.log(111);
+    }
+    function foo2(event) {
+      console.log(222);
+    }
+    function foo3(event) {
+      console.log(333);
+    }
+
+    function myFunction(arg1, arg2) {
+      this.firstName = arg1;
+      this.lastName  = arg2;
+      console.log(this)
+    }
+
+    var x = new myFunction("John","Doe");    // This    creates a new object
+
+    new function(){ console.log('立即执行') };
+
+    var elems = document.getElementsByTagName( 'a' )
+
+    for ( var i = 0; i < elems.length; i++ ) {
+      elems[i].addEventListener('click', (function(lockedInIndex){
+        return function(e){
+          e.preventDefault();
+          alert('I am link #' + lockedInIndex);
+        };
+      })(i),false);
+    }
+
+    function run(f){
+      return f();
+    }
+
+    run(function(){
+      console.log('....')
+    });
+
+  </script>
+</html>
